@@ -1,4 +1,5 @@
 import { Answer } from "../entities/answer"
+import { AnswersRepository } from "../repositories/answers-repository"
 
 type AnswerQuestionUseCaseRequest = {
   instructorId: string
@@ -7,8 +8,12 @@ type AnswerQuestionUseCaseRequest = {
 }
 
 export class AnswerQuestionUseCase {
-  execute(props: AnswerQuestionUseCaseRequest) {
-    const answer = new Answer(props.content)
+  constructor(private answeryRepository: AnswersRepository) {}
+
+  async execute(props: AnswerQuestionUseCaseRequest) {
+    const answer = new Answer(props.content, props.instructorId, props.questionId)
+
+    await this.answeryRepository.create(answer)
 
     return answer
   }
